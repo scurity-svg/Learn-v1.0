@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#0a0a14">
+<title>ZarrLearn — Premium Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-layer bg-gradient"></div>
+<div class="bg-layer bg-noise"></div>
+<canvas id="particles"></canvas>
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<div class="music-dock" id="musicDock">
+  <div class="music-dock-inner">
+    <div class="md-top" id="mdTop">
+      <div class="md-cover"><div class="md-cover-inner" id="mdCover">🎵</div></div>
+      <div class="md-info">
+        <div class="md-title" id="mdTitle">Lofi Study Beats</div>
+        <div class="md-artist" id="mdArtist">Chill Music</div>
+      </div>
+      <div class="md-wave" id="mdWave">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="md-controls">
+        <button class="md-btn" id="mdPrev">⏮</button>
+        <button class="md-btn md-btn-main" id="mdPlay">▶</button>
+        <button class="md-btn" id="mdNext">⏭</button>
+      </div>
+    </div>
+    <div class="md-expand" id="mdExpand">
+      <div class="md-handle"></div>
+      <div class="md-playlist-header">
+        <span>🎧 Playlist Fokus</span>
+        <span class="md-badge" id="mdCount">8 lagu</span>
+      </div>
+      <div class="md-playlist" id="mdPlaylist"></div>
+      <div class="md-volume">
+        <span>🔊</span>
+        <input type="range" id="mdVolume" min="0" max="100" value="60">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="ytPlayer" style="position:fixed;width:1px;height:1px;bottom:-100px;left:-100px;opacity:0;pointer-events:none"></div>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <span class="brand-glow"></span>
+        <span class="brand-icon">🧠</span>
+      </div>
+      <div class="brand-text">
+        <h1>Zarr<span>Learn</span></h1>
+        <p>PREMIUM LEARNING</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="hstat"><span class="hstat-icon">⭐</span><span class="hstat-val" id="hPoin">0</span></div>
+      <div class="hstat"><span class="hstat-icon">🔥</span><span class="hstat-val" id="hStreak">0</span></div>
+      <div class="hstat"><span class="hstat-icon">🏆</span><span class="hstat-val" id="hLevel">1</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="app-container">
+
+  <section class="panel active" id="panel-home">
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-greet">✨ Selamat Belajar</div>
+        <h2 class="hero-title">Halo, <span class="hero-name">Pemilik!</span> 👋</h2>
+        <p class="hero-desc">Sistem pembelajaran premium dengan musik fokus, kamus lengkap, materi terstruktur, dan tes IQ akurat.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="ZL.showPanel('pilihKelas')"><span>🚀</span> Mulai Belajar</button>
+          <button class="btn btn-ghost" onclick="ZL.showPanel('kamus')"><span>📖</span> Kamus</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="xp-card">
+      <div class="xp-head">
+        <div class="xp-level"><span class="xp-level-icon">🏆</span><span>Level <b id="xpLevel">1</b></span></div>
+        <div class="xp-count"><b id="xpNow">0</b> / <b id="xpMax">100</b> XP</div>
+      </div>
+      <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-label">Total Poin</div><div class="stat-value" id="sPoin">0</div></div>
+      <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-label">Soal Dijawab</div><div class="stat-value" id="sSoal">0</div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-label">Akurasi</div><div class="stat-value" id="sAkurasi">0%</div></div>
+      <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-label">Streak</div><div class="stat-value" id="sStreak">0</div></div>
+    </div>
+
+    <div class="section-title"><span class="st-line"></span><h3>🎯 Menu Utama</h3><span class="st-line"></span></div>
+
+    <div class="menu-grid">
+      <div class="menu-card" onclick="ZL.showPanel('pilihKelas')"><div class="menu-icon">📚</div><div class="menu-title">Latihan Soal</div><div class="menu-desc">8 Mapel lengkap</div></div>
+      <div class="menu-card" onclick="ZL.mulaiIQ()"><div class="menu-icon">🧠</div><div class="menu-title">Tes IQ</div><div class="menu-desc">20 soal akurat</div></div>
+      <div class="menu-card" onclick="ZL.showPanel('kamus')"><div class="menu-icon">📖</div><div class="menu-title">Kamus</div><div class="menu-desc">Istilah mapel</div></div>
+      <div class="menu-card" onclick="ZL.showPanel('materi')"><div class="menu-icon">📝</div><div class="menu-title">Materi</div><div class="menu-desc">Rumus & konsep</div></div>
+      <div class="menu-card" onclick="ZL.showPanel('flashcard')"><div class="menu-icon">🎯</div><div class="menu-title">Flashcard</div><div class="menu-desc">Hafalan cepat</div></div>
+      <div class="menu-card" onclick="ZL.showPanel('riwayat')"><div class="menu-icon">📊</div><div class="menu-title">Riwayat</div><div class="menu-desc">Statistik belajar</div></div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-pilihKelas">
+    <button class="btn-back" onclick="ZL.showPanel('home')">← Kembali</button>
+    <div class="section-title"><span class="st-line"></span><h3>🎓 Pilih Jenjang</h3><span class="st-line"></span></div>
+    <div class="jenjang-grid">
+      <div class="jenjang-card" onclick="ZL.pilihJenjang('SD')"><div class="jenjang-icon">🏫</div><h4>SD</h4><p>Kelas 1-6</p></div>
+      <div class="jenjang-card" onclick="ZL.pilihJenjang('SMP')"><div class="jenjang-icon">🏢</div><h4>SMP</h4><p>Kelas 7-9</p></div>
+      <div class="jenjang-card" onclick="ZL.pilihJenjang('SMA')"><div class="jenjang-icon">🎓</div><h4>SMA</h4><p>Kelas 10-12</p></div>
+    </div>
+    <div id="kelasList" style="display:none">
+      <div class="section-title"><span class="st-line"></span><h3>📖 Pilih Kelas</h3><span class="st-line"></span></div>
+      <div class="kelas-grid" id="kelasGrid"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-pilihMapel">
+    <button class="btn-back" onclick="ZL.showPanel('pilihKelas')">← Kembali</button>
+    <div class="section-title"><span class="st-line"></span><h3 id="mapelTitle">📖 Pilih Mapel</h3><span class="st-line"></span></div>
+    <div class="mapel-grid" id="mapelGrid"></div>
+  </section>
+
+  <section class="panel" id="panel-quiz">
+    <button class="btn-back" onclick="ZL.quitQuiz()">← Keluar</button>
+    <div class="card">
+      <div class="quiz-header">
+        <div class="quiz-chip">📚 <b id="qMapel">-</b></div>
+        <div class="quiz-chip">📝 <b id="qNomor">1</b>/<b id="qTotal">10</b></div>
+        <div class="quiz-chip">⭐ <b id="qPoin">0</b></div>
+        <div class="quiz-chip quiz-chip-timer" id="qTimerBox" style="display:none">⏱️ <b id="qTimer">--</b></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="qProgress" style="width:0%"></div></div>
+      <div class="quiz-question" id="qText">Memuat soal...</div>
+      <div class="quiz-options" id="qOptions"></div>
+      <button class="btn btn-primary" id="qNext" style="display:none" onclick="ZL.nextQuestion()">Soal Berikutnya →</button>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-iqHasil">
+    <div class="card card-center">
+      <div class="iq-icon">🧠</div>
+      <div class="iq-score" id="iqSkor">0</div>
+      <div class="iq-kategori" id="iqKategori">-</div>
+      <div class="iq-desc" id="iqDesc">-</div>
+      <div class="stats-grid stats-grid-3">
+        <div class="stat-card"><div class="stat-label">Benar</div><div class="stat-value" id="iqBenar">0</div></div>
+        <div class="stat-card"><div class="stat-label">Salah</div><div class="stat-value" id="iqSalah">0</div></div>
+        <div class="stat-card"><div class="stat-label">Waktu</div><div class="stat-value" id="iqWaktu">0s</div></div>
+      </div>
+      <button class="btn btn-primary" onclick="ZL.showPanel('home')" style="margin-top:16px">🏠 Kembali</button>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-kamus">
+    <button class="btn-back" onclick="ZL.showPanel('home')">← Kembali</button>
+    <div class="section-title"><span class="st-line"></span><h3>📖 Kamus Mapel</h3><span class="st-line"></span></div>
+    <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="kamusSearch" placeholder="Cari istilah..." oninput="ZL.filterKamus()"></div>
+    <div class="kamus-filter" id="kamusFilter"></div>
+    <div class="kamus-list" id="kamusList"></div>
+  </section>
+
+  <section class="panel" id="panel-materi">
+    <button class="btn-back" onclick="ZL.showPanel('home')">← Kembali</button>
+    <div class="section-title"><span class="st-line"></span><h3>📝 Materi Ringkas</h3><span class="st-line"></span></div>
+    <div class="materi-tabs" id="materiTabs"></div>
+    <div class="materi-content" id="materiContent"></div>
+  </section>
+
+  <section class="panel" id="panel-flashcard">
+    <button class="btn-back" onclick="ZL.showPanel('home')">← Kembali</button>
+    <div class="section-title"><span class="st-line"></span><h3>🎯 Flashcard</h3><span class="st-line"></span></div>
+    <div class="flashcard-selector" id="flashcardSelector"></div>
+    <div class="flashcard-area">
+      <div class="flashcard" id="flashcard" onclick="ZL.flipCard()">
+        <div class="flashcard-face flashcard-front">
+          <div class="fc-label">SOAL</div>
+          <div class="fc-content" id="fcFront">Pilih deck dulu</div>
+          <div class="fc-hint">Ketuk untuk lihat jawaban</div>
+        </div>
+        <div class="flashcard-face flashcard-back">
+          <div class="fc-label">JAWABAN</div>
+          <div class="fc-content" id="fcBack">-</div>
+          <div class="fc-hint">Ketuk untuk kembali</div>
+        </div>
+      </div>
+      <div class="flashcard-controls">
+        <button class="fc-btn" onclick="ZL.prevCard()">← Sebelumnya</button>
+        <span class="fc-counter" id="fcCounter">0 / 0</span>
+        <button class="fc-btn" onclick="ZL.nextCard()">Berikutnya →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-riwayat">
+    <button class="btn-back" onclick="ZL.showPanel('home')">← Kembali</button>
+    <div class="section-title"><span class="st-line"></span><h3>📊 Riwayat Belajar</h3><span class="st-line"></span></div>
+    <div class="card"><div id="riwayatList"></div></div>
+  </section>
+
+  <section class="panel" id="panel-tips">
+    <button class="btn-back" onclick="ZL.showPanel('home')">← Kembali</button>
+    <div class="section-title"><span class="st-line"></span><h3>💡 Tips Jadi Jenius</h3><span class="st-line"></span></div>
+    <div class="tips-list" id="tipsList"></div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"><span class="toast-icon">✅</span><span class="toast-text" id="toastText">Berhasil!</span></div>
+<div class="achieve" id="achieve"><div class="achieve-icon">🏆</div><div class="achieve-text" id="achieveText">Achievement!</div></div>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-logo">🧠</div>
+  <div class="loading-text">ZarrLearn Premium</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+    </html>
